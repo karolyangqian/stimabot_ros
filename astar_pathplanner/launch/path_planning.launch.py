@@ -28,40 +28,10 @@ def generate_launch_description():
     
     pkg_share = get_package_share_directory('astar_pathplanner')
     
-    map_yaml_arg = DeclareLaunchArgument(
-        'map',
-        default_value=os.path.join(pkg_share, 'map', '10x10', 'map.yaml'),
-        description='Full path to map yaml file to load'
-    )
-    
     use_sim_time_arg = DeclareLaunchArgument(
         'use_sim_time',
         default_value='true',
         description='Use simulation time'
-    )
-    
-    forward_speed_arg = DeclareLaunchArgument(
-        'forward_speed',
-        default_value='0.2',
-        description='Forward speed for the robot (m/s)'
-    )
-    
-    rotational_speed_arg = DeclareLaunchArgument(
-        'rotational_speed', 
-        default_value='0.5',
-        description='Rotational speed for the robot (rad/s)'
-    )
-    
-    map_server_launch = IncludeLaunchDescription(
-        PathJoinSubstitution([
-            FindPackageShare('astar_pathplanner'),
-            'launch',
-            'map_server.launch.py'
-        ]),
-        launch_arguments={
-            'map': LaunchConfiguration('map'),
-            'use_sim_time': LaunchConfiguration('use_sim_time')
-        }.items()
     )
     
     astar_pathplanner_node = Node(
@@ -69,15 +39,7 @@ def generate_launch_description():
         executable='astar_pathplanner_node',
         name='astar_pathplanner',
         output='screen',
-        parameters=[
-            {
-                'heuristic_weight': 1.0,
-                'use_diagonal_movement': True,
-                'allow_unknown': True,
-                'obstacle_cost_threshold': 65.0,
-                'use_sim_time': LaunchConfiguration('use_sim_time')
-            }
-        ]
+        parameters=[os.path.join(pkg_share, 'config', 'astar_pathplanner.yaml')],
     )
     
     goto_waypoint_node = Node(
@@ -85,13 +47,7 @@ def generate_launch_description():
         executable='goto_waypoint',
         name='goto_waypoint',
         output='screen',
-        parameters=[
-            {
-                'forward_speed': LaunchConfiguration('forward_speed'),
-                'rotational_speed': LaunchConfiguration('rotational_speed'),
-                'use_sim_time': LaunchConfiguration('use_sim_time')
-            }
-        ],
+        parameters=[os.path.join(pkg_share, 'config', 'goto_waypoint.yaml')],
         remappings=[
             ('/goal_pose', '/move_base_simple/goal'),
             # ('/plan', '/global_planner/plan'),
@@ -113,28 +69,9 @@ def generate_launch_description():
         parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}]
     )
     
-    rviz_node_delayed = TimerAction(
-        period=3.0,  # Wait 3 seconds
-        actions=[
-            Node(
-                package='rviz2',
-                executable='rviz2',
-                name='rviz2',
-                output='screen',
-                arguments=['-d', rviz_config],
-                parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}]
-            )
-        ]
-    )
-    
     return LaunchDescription([
-        map_yaml_arg,
         use_sim_time_arg,
-        forward_speed_arg,
-        rotational_speed_arg,
         astar_pathplanner_node,
         goto_waypoint_node,
-        # map_server_launch,
         rviz_node
-        # rviz_node_delayed,
     ])

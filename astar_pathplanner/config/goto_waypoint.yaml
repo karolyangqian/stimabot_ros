@@ -1,0 +1,4 @@
+goto_waypoint:
+  ros__parameters:
+    forward_speed: 0.5
+    rotational_speed: 0.8

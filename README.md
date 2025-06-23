@@ -1,10 +1,11 @@
 # A* Path Planning for TurtleBot3 in ROS2
 
-**Implementasi Algoritma A* untuk Perencanaan Jalur Robot dalam ROS2 dan Gazebo**
+**Implementasi Algoritma A\* untuk Perencanaan Jalur Robot dalam ROS2 dan Gazebo**
 
 <!-- Placeholder for demo GIF -->
 ![Demo GIF](assets/demo.gif)
-*Demo: Robot TurtleBot3 navigasi menggunakan algoritma A* di lingkungan labirin*
+
+*Demo: Robot TurtleBot3 navigasi menggunakan algoritma A\* di lingkungan labirin*
 
 ---
 
@@ -14,7 +15,7 @@ Program ini merupakan implementasi algoritma A* untuk perencanaan jalur robot ya
 
 - **Input**: Occupancy Grid Map, posisi robot saat ini (`/odom`), dan titik tujuan (`/goal_pose`)
 - **Output**: Path planning (`/plan`) untuk navigasi robot
-- **Kontroler**: Open-loop sequential control tanpa feedback menggunakan node `goto_waypoint`
+- **Kontroler**: Sequential path following dengan feedback control untuk setiap waypoint menggunakan node `goto_waypoint`
 
 ### 🏗️ Arsitektur Sistem
 
@@ -145,6 +146,9 @@ astar_pathplanner/
 Parameter algoritma A* dapat disesuaikan di:
 - `config/astar_pathplanner.yaml`
 
+Parameter goto waypoint controller dapat disesuaikan di:
+- `config/goto_waypoint.yaml`
+
 ## 📺 Topics dan Services
 
 ### Subscribed Topics
@@ -158,7 +162,7 @@ Parameter algoritma A* dapat disesuaikan di:
 
 ## 🏆 Fitur
 
-- ✅ **Pure A* Algorithm**: Implementasi algoritma A* dari nol
+- ✅ **Pure A\* Algorithm**: Implementasi algoritma A* dari nol
 - ✅ **ROS2 Integration**: Terintegrasi penuh dengan ekosistem ROS2
 - ✅ **Modular Design**: Pemisahan core algorithm dan ROS2 wrapper
 - ✅ **Real-time Visualization**: Visualisasi path planning di RViz2
