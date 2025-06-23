@@ -1,0 +1,6 @@
+astar_pathplanner:
+  ros__parameters:
+    heuristic_weight: 1.0
+    use_diagonal_movement: true
+    allow_unknown: true
+    obstacle_cost_threshold: 65.0
